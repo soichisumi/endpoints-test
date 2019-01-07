@@ -6,7 +6,7 @@ info:
 host: "sample-api.endpoints.fir-test-us-east.cloud.goog"
 x-google-endpoints:
     - name: "sample-api.endpoints.fir-test-us-east.cloud.goog"
-      target: "service-ext-address"
+      target: "[service-ext-address]"
 paths:
   /hello:
     get:
