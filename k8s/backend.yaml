@@ -1,0 +1,44 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: endpoints-service
+spec:
+  selector:
+    app: myendpoints-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8081
+  type: LoadBalancer
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: endpoints-deployment
+  labels:
+    app: myendpoints-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myendpoints-app
+  template:
+    metadata:
+      labels:
+        app: myendpoints-app
+    spec:
+      containers:
+      - name: esp
+        image: gcr.io/endpoints-release/endpoints-runtime:1
+        args: [
+          "-p", "8081",
+          "-a", "0.0.0.0:8080",
+          "-s", "sample-api.endpoints.fir-test-us-east.cloud.goog",
+          "-R", "managed"
+        ]
+        ports:
+        - containerPort: 8081
+      - name: backend-go
+        image: gcr.io/fir-test-us-east/backend-go
+        ports:
+        - containerPort: 8080
